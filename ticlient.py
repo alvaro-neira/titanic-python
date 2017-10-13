@@ -8,26 +8,28 @@ Author : Min RK <benjaminrk@gmail.com>
 import sys
 import time
 
-from mdcliapi import MajorDomoClient
+from MajorDomoClient import MajorDomoClient
 
-def service_call (session, service, request):
+
+def service_call(mdpclient, service, message):
     """Calls a TSP service
 
     Returns reponse if successful (status code 200 OK), else None
     """
-    reply = session.send(service, request)
+    reply = mdpclient.send(service, message)
     if reply:
         status = reply.pop(0)
         if status == "200":
             return reply
         elif status == "400":
             print "E: client fatal error, aborting"
-            sys.exit (1)
+            sys.exit(1)
         elif status == "500":
             print "E: server fatal error, aborting"
-            sys.exit (1)
+            sys.exit(1)
     else:
-        sys.exit (0);    #  Interrupted or failed
+        sys.exit(0);  # Interrupted or failed
+
 
 def main():
     verbose = '-v' in sys.argv
@@ -43,11 +45,11 @@ def main():
         uuid = reply.pop(0)
         print "I: request UUID ", uuid
 
-    #  2. Wait until we get a reply
+    # 2. Wait until we get a reply
     while True:
-        time.sleep (.1)
+        time.sleep(.1)
         request = [uuid]
-        reply = service_call (session, "titanic.reply", request)
+        reply = service_call(session, "titanic.reply", request)
 
         if reply:
             reply_string = reply[-1]
@@ -55,12 +57,13 @@ def main():
 
             #  3. Close request
             request = [uuid]
-            reply = service_call (session, "titanic.close", request)
+            reply = service_call(session, "titanic.close", request)
             break
         else:
             print "I: no reply yet, trying again..."
-            time.sleep(5)     #  Try again in 5 seconds
+            time.sleep(5)  # Try again in 5 seconds
     return 0
+
 
 if __name__ == '__main__':
     main()

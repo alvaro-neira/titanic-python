@@ -1,22 +1,12 @@
-"""Majordomo Protocol worker example.
+import zmq
+from MajorDomoWorker import MajorDomoWorker
+from zmq.eventloop.ioloop import IOLoop
 
-Uses the mdwrk API to hide all MDP aspects
-
-Author: Min RK <benjaminrk@gmail.com>
-"""
-
-import sys
-from mdwrkapi import MajorDomoWorker
 
 def main():
-    verbose = '-v' in sys.argv
-    worker = MajorDomoWorker("tcp://localhost:5555", "echo", verbose)
-    reply = None
-    while True:
-        request = worker.recv(reply)
-        if request is None:
-            break # Worker was interrupted
-        reply = request # Echo is complex... :-)
+    worker = MajorDomoWorker("tcp://127.0.0.1:5555", b"echo", "")
+    IOLoop.instance().start()
+    worker.shutdown()
 
 
 if __name__ == '__main__':
