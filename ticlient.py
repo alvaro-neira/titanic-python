@@ -8,15 +8,15 @@ Author : Min RK <benjaminrk@gmail.com>
 import sys
 import time
 
-from MajorDomoClient import MajorDomoClient
+from TitanicClient import TitanicClient
 
 
-def service_call(mdpclient, service, message):
+def service_call(session, service, request):
     """Calls a TSP service
 
     Returns reponse if successful (status code 200 OK), else None
     """
-    reply = mdpclient.send(service, message)
+    reply = session.send(service, request)
     if reply:
         status = reply.pop(0)
         if status == "200":
@@ -33,7 +33,7 @@ def service_call(mdpclient, service, message):
 
 def main():
     verbose = '-v' in sys.argv
-    session = MajorDomoClient("tcp://localhost:5555", verbose)
+    session = TitanicClient("tcp://127.0.0.1:5555", verbose)
 
     #  1. Send 'echo' request to Titanic
     request = ["echo", "Hello world"]
