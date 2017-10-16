@@ -4,9 +4,8 @@ from mdp.client import MDPClient
 
 
 class MajorDomoClient(MDPClient):
-    def __init__(self, endpoint, verbose):
-        self.context = zmq.Context()
-        super(MajorDomoClient, self).__init__(self.context, endpoint, b"echo")
+    def __init__(self, context, endpoint, servicename):
+        super(MajorDomoClient, self).__init__(context, endpoint, servicename)
         return
 
     def on_message(self, msg):

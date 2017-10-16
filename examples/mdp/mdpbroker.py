@@ -7,6 +7,7 @@ import zmq
 from zmq.eventloop.ioloop import IOLoop
 from pprint import pprint
 
+
 def _on_msg(msg):
     print 'broker received:',
     pprint(msg)
@@ -26,9 +27,10 @@ def _on_msg(msg):
 
 
 def main():
-    broker = MajorDomoBroker("")
+    broker = MajorDomoBroker()
     IOLoop.instance().start()
     broker.shutdown()
+
 
 if __name__ == '__main__':
     main()
